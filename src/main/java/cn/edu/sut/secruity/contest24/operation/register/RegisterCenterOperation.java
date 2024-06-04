@@ -35,8 +35,7 @@ public class RegisterCenterOperation {
             Element exp = expPrefix.duplicate().invert().getImmutable();
             Element basePrefix = g__1.duplicate().powZn(nodeValue).duplicate().mul(uvk).getImmutable();
             Element base = g_1.duplicate().mul(basePrefix).getImmutable();
-            Element tToken = base.duplicate().powZn(exp).getImmutable();
-            return tToken;
+            return base.duplicate().powZn(exp).getImmutable();  //Ttoken
         } else {
             return null;
         }
@@ -69,8 +68,7 @@ public class RegisterCenterOperation {
         Element phi_1 = proof.getPhi_1();
         Element phi_3 = proof.getPhi_3();
         Element rtsk = RegisterParam.rtsk;
-        Element trace_token = phi_1.duplicate().div(phi_3.duplicate().powZn(rtsk)).getImmutable();
-        return trace_token;
+        return phi_1.duplicate().div(phi_3.duplicate().powZn(rtsk)).getImmutable();     //trace_token
     }
 
 }

@@ -49,7 +49,7 @@ public class ElementOperation {
      * @return element
      */
     public static Element getElementFromString(String elementString, Field field) {
-        if (elementString == null || "".equals(elementString))
+        if (elementString == null || elementString.isEmpty())
             return null;
         String[] stringList = elementString.substring(1, elementString.length() - 1).split(", ");
         byte[] byteList = new byte[stringList.length];
@@ -67,7 +67,7 @@ public class ElementOperation {
      * @return element
      */
     public static Element getElementFromString(String elementString) {
-        if (elementString == null || "".equals(elementString))
+        if (elementString == null || elementString.isEmpty())
             return null;
         ElementStorage elementStorage = JSON.parseObject(elementString, ElementStorage.class);
         String elementStr = elementStorage.element;
@@ -132,7 +132,10 @@ public class ElementOperation {
         }
 
         // 计算哈希值
-        byte[] hashValue = md.digest(resBytes);
+        byte[] hashValue = new byte[0];
+        if (md != null) {
+            hashValue = md.digest(resBytes);
+        }
 
         return PublicParam.Zr.newElementFromHash(hashValue, 0, hashValue.length);
     }

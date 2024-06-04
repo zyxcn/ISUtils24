@@ -13,8 +13,6 @@ public class Issuer {
     //发行方密钥生成算法
     public void IKeyGen(RAAScheme param, String identity, int n) {
 
-        String ID = identity;
-
         Element[] sk = new Element[n];
         Element[] vk = new Element[n];
 
@@ -27,9 +25,9 @@ public class Issuer {
 
         this.isk = sk;
         this.ivk = vk;
-        this.ID = ID;
+        this.ID = identity;
 
-        System.out.println("the key pair of " + ID);
+        System.out.println("the key pair of " + identity);
         for (int i = 0; i < ivk.length; i++) {
             System.out.println("isk[" + i + "] = " + isk[i]);
             System.out.println("ivk[" + i + "] = " + ivk[i]);
@@ -51,16 +49,14 @@ public class Issuer {
             System.out.println("当前车辆未被撤销");
             System.out.println("开始验证车辆OBU发送的证明......");
 
-            Element[] proof = proofs;
-
             //将Element[]数组元素转成数组元素不可变的list数组形式
             //for example: Element[0] = 0, Element[1] = 1; list = [0,1]
             //List prr = Arrays.stream(proof).toList();
             //List list = Collections.unmodifiableList(prr);
             //System.out.println(list.get(1));//相当于输出Element[1]
 
-            Element Rl = param.g1.duplicate().powZn(proof[0]).getImmutable();
-            Element Rr = vehicle.uvk.duplicate().powZn(proof[1]).negate();
+            Element Rl = param.g1.duplicate().powZn(proofs[0]).getImmutable();
+            Element Rr = vehicle.uvk.duplicate().powZn(proofs[1]).negate();
 
             Element RR = Rl.duplicate().mul(Rr).getImmutable();
             System.out.print("RR = ");
@@ -71,7 +67,7 @@ public class Issuer {
             byte[] conn1 = issuer.ivk[0].toBytes();
             byte[] conn2 = vehicle.uvk.toBytes();
             byte[] conn3 = RR.toBytes();
-            System.out.println(conn3);
+            System.out.println(Arrays.toString(conn3));
             byte[] connt = new byte[conn1.length + conn2.length + conn3.length];
             System.arraycopy(conn1, 0, connt, 0, conn1.length);
             System.arraycopy(conn2, 0, connt, conn1.length, conn2.length);
@@ -84,7 +80,7 @@ public class Issuer {
             System.out.println(cc);
 
             Element cred = null;
-            if (cc.isEqual(proof[1])) {
+            if (cc.isEqual(proofs[1])) {
                 System.out.println("验证成功");
                 System.out.println("正在签发访问凭证..........");
 
@@ -119,8 +115,7 @@ public class Issuer {
 
         } else {
             String res = "error!";
-            Element results = Util.StringToElement(param.pairing, res);
-            return results;
+            return Util.StringToElement(param.pairing, res);
         }
 
 

@@ -1,14 +1,19 @@
-package cn.edu.sut.secruity.contest24;
-
+import cn.edu.sut.secruity.contest24.*;
 import it.unisa.dia.gas.jpbc.Element;
+import org.junit.Test;
 
 import java.util.Arrays;
 
-
 public class RAASTest {
     static byte[][] bytes = new byte[4][];
-
-    private static void raasTest() throws Exception {
+    public static boolean isOk(byte[] a, byte[] aa) {
+        for (int i = 0; i < a.length; i++)
+            if (a[i] != aa[i])
+                return false;
+        return true;
+    }
+    @Test
+    public void raasTest() throws Exception {
         RAAScheme raa = new RAAScheme();
         raa.Setup("f.properties");
 
@@ -225,16 +230,5 @@ public class RAASTest {
         bech.FBechmark(raa);
 
 
-    }
-
-    public static boolean isOk(byte[] a, byte[] aa) {
-        for (int i = 0; i < a.length; i++)
-            if (a[i] != aa[i])
-                return false;
-        return true;
-    }
-
-    public static void main(String[] args) throws Exception {
-        raasTest();
     }
 }

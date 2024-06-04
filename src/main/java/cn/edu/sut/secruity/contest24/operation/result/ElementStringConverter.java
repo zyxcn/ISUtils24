@@ -21,8 +21,8 @@ public class ElementStringConverter {
     public static void elementToString(Object src, Object dest) {
         try {
             //源需要field,目标需要fieldName
-            List<Field> srcFields = Arrays.asList(src.getClass().getDeclaredFields());
-            List<String> destFieldNames = Arrays.asList(dest.getClass().getDeclaredFields()).stream().map(Field::getName).collect(Collectors.toList());
+            Field[] srcFields = src.getClass().getDeclaredFields();
+            List<String> destFieldNames = Arrays.stream(dest.getClass().getDeclaredFields()).map(Field::getName).collect(Collectors.toList());
             for (Field field : srcFields) {
                 //若不同名结束
                 if (!destFieldNames.contains(field.getName()))
@@ -60,7 +60,7 @@ public class ElementStringConverter {
                 Object o = field.get(src);
                 if (!Objects.isNull(o)) {
                     Field destField = dest.getClass().getDeclaredField(field.getName());
-                    Class destFieldType = destField.getType();
+                    Class<?> destFieldType = destField.getType();
                     //若继承自element
                     if (Element.class.isAssignableFrom(destFieldType)) {
                         destField.setAccessible(true);
